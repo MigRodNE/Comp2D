@@ -142,7 +142,12 @@ int main( int argc, char* argv[] )
 		logFileNameStringStream.str( "" );
 
 		struct tm timeinfo;
-		localtime_s( &timeinfo, &timeAtProgramStart_c );
+
+		#ifdef WINDOWS
+			localtime_s( &timeinfo, &timeAtProgramStart_c );
+		#else
+			timeinfo = *localtime( &timeAtProgramStart_c );
+		#endif	
 
 		logFileNameStringStream << "Logs/log_" << std::put_time( &timeinfo, "%Y_%m_%d_%H_%M_%S" ) << ".txt";
 
